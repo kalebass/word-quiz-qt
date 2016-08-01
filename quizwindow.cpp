@@ -47,9 +47,11 @@ void QuizWindow::beginQuiz()
 {
 	ui->choiceTable->setModel(nullptr);
 	loadDictionaryFiles();
-	quiz_.begin();
-	ui->choiceTable->setModel(quizModel);
-	displayQuestion();
+	if (quiz_.wordCount() != 0) {
+		quiz_.begin();
+		ui->choiceTable->setModel(quizModel);
+		displayQuestion();
+	}
 }
 
 void QuizWindow::loadDictionaryFiles()
