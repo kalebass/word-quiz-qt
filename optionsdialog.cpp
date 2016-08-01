@@ -32,11 +32,12 @@ void OptionsDialog::saveDictionarySettings() const
 	auto changed{ false };
 	auto fileCount{ ui->dictionaryList->count() };
 	for (auto i{ 0 }; i < fileCount; ++i) {
-		auto fileName{ ui->dictionaryList->item(i)->text() };
-		auto checked{ ui->dictionaryList->item(i)->checkState() == Qt::Checked };
-		auto checkedBefore{ settings.value(fileName).toBool() };
-		if (checked != checkedBefore) {
-			settings.setValue(fileName, checked);
+		auto item{ ui->dictionaryList->item(i) };
+		auto fileName{ item->text() };
+		auto isChecked{ item->checkState() == Qt::Checked };
+		auto wasChecked{ settings.value(fileName).toBool() };
+		if (isChecked != wasChecked) {
+			settings.setValue(fileName, isChecked);
 			changed = true;
 		}
 	}
