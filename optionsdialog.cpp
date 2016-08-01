@@ -8,6 +8,11 @@ OptionsDialog::OptionsDialog(QWidget* parent) :
 {
 	ui->setupUi(this);
 	connect(this, &QDialog::accepted, this, &OptionsDialog::saveDictionarySettings);
+	auto flags{ windowFlags() | Qt::CustomizeWindowHint };
+	flags &= ~Qt::WindowContextHelpButtonHint;
+	flags &= ~Qt::WindowSystemMenuHint;
+	flags &= ~Qt::WindowCloseButtonHint;
+	setWindowFlags(flags);
 }
 
 void OptionsDialog::readDictionaryList()
