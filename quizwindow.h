@@ -32,6 +32,7 @@ private:
 	void beginQuiz();
 	void onAnswer(const QModelIndex&);
 	void next();
+	void updateUi(bool showQuestion);
 
 	Ui::MainWindow* ui;
 	OptionsDialog* optionsDialog;

@@ -27,11 +27,6 @@ QuizWindow::QuizWindow(QWidget* parent) :
 	ui->answerEdit->setFont(songti);
 	quizModel->setChineseFont(songti);
 	beginQuiz();
-	auto status{ tr("%1 of %2\n%3 correct")
-		.arg(quiz_.currentIndex() + 1)
-		.arg(quiz_.wordCount())
-		.arg(quiz_.score()) };
-	ui->statusDisplay->setText(status);
 
 	auto showOptionsAction{ new QAction{ "Options", this } };
 	ui->toolBar->addAction(showOptionsAction);
@@ -51,6 +46,9 @@ void QuizWindow::beginQuiz()
 		quiz_.begin();
 		ui->choiceTable->setModel(quizModel);
 		displayQuestion();
+	} else {
+		ui->question->setText("[Dictionaries empty or not selected]");
+		updateUi(false);
 	}
 }
 
@@ -79,33 +77,36 @@ void QuizWindow::loadDictionaryFiles()
 	}
 }
 
-void QuizWindow::displayQuestion()
+void QuizWindow::updateUi(bool showQuestion)
 {
-	ui->nextButton->setEnabled(false);
-	ui->choiceTable->setEnabled(true);
-	ui->choiceTable->setColumnHidden(static_cast<int>(Quiz::Language::Pinyin), true);
-	ui->choiceTable->setColumnHidden(static_cast<int>(Quiz::Language::English), true);
-	ui->choiceTable->selectionModel()->clear();
-	quiz_.nextQuestion();
-	ui->question->setText(quiz_.currentWord(Quiz::Language::English));
-	ui->choiceTable->resizeColumnsToContents();
-}
-
-void QuizWindow::onAnswer(const QModelIndex& index)
-{
-	quizModel->makeAnswer(index);
+	auto enableNext{ !showQuestion && quiz_.currentIndex() < quiz_.wordCount() - 1 };
+	ui->nextButton->setEnabled(enableNext);
+	ui->answerEdit->setEnabled(showQuestion);
+	ui->choiceTable->setEnabled(showQuestion);
+	ui->choiceTable->setColumnHidden(static_cast<int>(Quiz::Language::Pinyin), showQuestion);
+	ui->choiceTable->setColumnHidden(static_cast<int>(Quiz::Language::English), showQuestion);
 	auto status{ tr("%1 of %2\n%3 correct")
 			.arg(quiz_.currentIndex() + 1)
 			.arg(quiz_.wordCount())
 			.arg(quiz_.score()) };
 	ui->statusDisplay->setText(status);
-	ui->choiceTable->setEnabled(false);
-	ui->choiceTable->setColumnHidden(static_cast<int>(Quiz::Language::Pinyin), false);
-	ui->choiceTable->setColumnHidden(static_cast<int>(Quiz::Language::English), false);
-	ui->choiceTable->resizeColumnsToContents();
-	if (quiz_.currentIndex() + 1 < quiz_.wordCount()) {
-		ui->nextButton->setEnabled(true);
+	if (ui->choiceTable->model()) {
+		ui->choiceTable->resizeColumnsToContents();
 	}
+}
+
+void QuizWindow::displayQuestion()
+{
+	quiz_.nextQuestion();
+	updateUi(true);
+	ui->choiceTable->selectionModel()->clear();
+	ui->question->setText(quiz_.currentWord(Quiz::Language::English));
+}
+
+void QuizWindow::onAnswer(const QModelIndex& index)
+{
+	quizModel->makeAnswer(index);
+	updateUi(false);
 }
 
 QuizWindow::~QuizWindow()
