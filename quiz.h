@@ -24,6 +24,7 @@ public:
 
 	void begin();
 	bool makeAnswer(int alternative);
+	bool makeAnswer(const QString&);
 	void nextQuestion();
 
 private:

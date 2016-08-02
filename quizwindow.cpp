@@ -36,6 +36,7 @@ QuizWindow::QuizWindow(QWidget* parent) :
 	connect(optionsDialog, &OptionsDialog::dictionarySettingChanged, this, &QuizWindow::beginQuiz);
 	connect(ui->choiceTable, &QAbstractItemView::clicked, this, &QuizWindow::onAnswer);
 	connect(ui->choiceTable, &QAbstractItemView::activated, this, &QuizWindow::onAnswer);
+	connect(ui->answerEdit, &QLineEdit::returnPressed, this,&QuizWindow::onAnswerEntered);
 }
 
 void QuizWindow::beginQuiz()
@@ -106,6 +107,12 @@ void QuizWindow::displayQuestion()
 void QuizWindow::onAnswer(const QModelIndex& index)
 {
 	quizModel->makeAnswer(index);
+	updateUi(false);
+}
+
+void QuizWindow::onAnswerEntered()
+{
+	quiz_.makeAnswer(ui->answerEdit->text());
 	updateUi(false);
 }
 

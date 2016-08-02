@@ -31,6 +31,7 @@ private:
 	void displayQuestion();
 	void beginQuiz();
 	void onAnswer(const QModelIndex&);
+	void onAnswerEntered();
 	void next();
 	void updateUi(bool showQuestion);
 

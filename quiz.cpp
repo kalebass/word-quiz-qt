@@ -87,6 +87,15 @@ bool Quiz::makeAnswer(int choice)
 	return false;
 }
 
+bool Quiz::makeAnswer(const QString& guess)
+{
+	if (guess == currentWord(Language::Hanzi)) {
+		++score_;
+		return true;
+	}
+	return false;
+}
+
 void Quiz::begin()
 {
 	answerIndexes_ = shuffledRange(wordCount(), wordCount());
