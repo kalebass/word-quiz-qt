@@ -91,9 +91,7 @@ void QuizWindow::updateUi(bool showQuestion)
 			.arg(quiz_.wordCount())
 			.arg(quiz_.score()) };
 	ui->statusDisplay->setText(status);
-	if (ui->choiceTable->model()) {
-		ui->choiceTable->resizeColumnsToContents();
-	}
+	ui->choiceTable->resizeColumnsToContents();
 }
 
 void QuizWindow::displayQuestion()
