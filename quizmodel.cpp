@@ -53,12 +53,6 @@ Qt::ItemFlags QuizModel::flags(const QModelIndex& index) const
 	return Qt::ItemIsEnabled;
 }
 
-void QuizModel::makeAnswer(const QModelIndex& index)
-{
-	auto choice{ index.row() };
-	quiz_.makeAnswer(choice);
-}
-
 void QuizModel::setChineseFont(QFont& font)
 {
 	chineseFont = &font;

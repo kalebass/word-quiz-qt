@@ -23,7 +23,6 @@ public:
 	QString alternative(int number, Language) const;
 
 	void begin();
-	bool makeAnswer(int alternative);
 	bool makeAnswer(const QString&);
 	void nextQuestion();
 

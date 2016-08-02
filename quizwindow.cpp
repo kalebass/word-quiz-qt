@@ -34,8 +34,8 @@ QuizWindow::QuizWindow(QWidget* parent) :
 	connect(showOptionsAction, &QAction::triggered, optionsDialog, &QWidget::show);
 	connect(showOptionsAction, &QAction::triggered, optionsDialog, &OptionsDialog::readDictionaryList);
 	connect(optionsDialog, &OptionsDialog::dictionarySettingChanged, this, &QuizWindow::beginQuiz);
-	connect(ui->choiceTable, &QAbstractItemView::clicked, this, &QuizWindow::onAnswer);
-	connect(ui->choiceTable, &QAbstractItemView::activated, this, &QuizWindow::onAnswer);
+	connect(ui->choiceTable, &QAbstractItemView::clicked, this, &QuizWindow::onChoice);
+	connect(ui->choiceTable, &QAbstractItemView::activated, this, &QuizWindow::onChoice);
 	connect(ui->answerEdit, &QLineEdit::returnPressed, this,&QuizWindow::onAnswerEntered);
 }
 
@@ -104,9 +104,10 @@ void QuizWindow::displayQuestion()
 	ui->question->setText(quiz_.currentWord(Quiz::Language::English));
 }
 
-void QuizWindow::onAnswer(const QModelIndex& index)
+void QuizWindow::onChoice(const QModelIndex& index)
 {
-	quizModel->makeAnswer(index);
+	auto answer{ quizModel->data(index).toString() };
+	quiz_.makeAnswer(answer);
 	updateUi(false);
 }
 

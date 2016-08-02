@@ -78,15 +78,6 @@ QString Quiz::alternative(int number, Language language) const
 	return words.at(index);
 }
 
-bool Quiz::makeAnswer(int choice)
-{
-	if (currentChoiceIndexes_.at(choice) == currentCorrectIndex()) {
-		++score_;
-		return true;
-	}
-	return false;
-}
-
 bool Quiz::makeAnswer(const QString& guess)
 {
 	if (guess == currentWord(Language::Hanzi)) {

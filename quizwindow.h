@@ -30,7 +30,7 @@ private:
 	void loadDictionaryFiles();
 	void displayQuestion();
 	void beginQuiz();
-	void onAnswer(const QModelIndex&);
+	void onChoice(const QModelIndex&);
 	void onAnswerEntered();
 	void next();
 	void updateUi(bool showQuestion);
