@@ -2,6 +2,7 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
+#include "settingshandler.h"
 
 namespace Ui {
 class OptionsDialog;
@@ -12,7 +13,7 @@ class OptionsDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit OptionsDialog(QWidget* parent = nullptr);
+	OptionsDialog(SettingsHandler& settings, QWidget* parent = nullptr);
 	void readDictionaryList();
 	~OptionsDialog();
 
@@ -21,6 +22,8 @@ signals:
 
 private:
 	void saveDictionarySettings() const;
+
+	SettingsHandler& settings_;
 	Ui::OptionsDialog* ui;
 };
 

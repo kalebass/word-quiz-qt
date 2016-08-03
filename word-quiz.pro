@@ -16,13 +16,15 @@ SOURCES += main.cpp\
     quizwindow.cpp \
     quiz.cpp \
     quizmodel.cpp \
-    optionsdialog.cpp
+    optionsdialog.cpp \
+    settingshandler.cpp
 
 HEADERS  += \
     quizwindow.h \
     quiz.h \
     quizmodel.h \
-    optionsdialog.h
+    optionsdialog.h \
+    settingshandler.h
 
 FORMS    += \
     quizwindow.ui \

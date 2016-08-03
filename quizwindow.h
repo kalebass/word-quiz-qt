@@ -4,6 +4,7 @@
 #include <QFont>
 #include <QMainWindow>
 #include "quiz.h"
+#include "settingshandler.h"
 
 class QDir;
 class QuizModel;
@@ -37,8 +38,10 @@ private:
 
 	Ui::MainWindow* ui;
 	OptionsDialog* optionsDialog;
-	Quiz quiz_;
 	QuizModel* quizModel;
+
+	Quiz quiz_;
+	SettingsHandler settings_;
 };
 
 #endif // MAINWINDOW_H

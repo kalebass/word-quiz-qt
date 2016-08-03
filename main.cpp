@@ -3,6 +3,7 @@
 
 int main(int argc, char *argv[])
 {
+	QCoreApplication::setOrganizationName("Arvid");
 	QCoreApplication::setApplicationName("Word quiz");
 	QApplication application(argc, argv);
 	QuizWindow w;

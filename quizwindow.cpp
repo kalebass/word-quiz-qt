@@ -3,7 +3,6 @@
 #include <QAction>
 #include <QDirIterator>
 #include <QMessageBox>
-#include <QSettings>
 #include <QTextStream>
 #include "quizmodel.h"
 #include "optionsdialog.h"
@@ -12,17 +11,16 @@ QFont QuizWindow::songti{ QString{ "SimSun" }, 18 };
 QFont QuizWindow::heiti{ QString{ "Microsoft YaHei" }, 16 };
 QFont QuizWindow::fangSongti{ QString{ "FangSong" }, 20 };
 QFont QuizWindow::kaiti{ QString{ "KaiTi" }, 22 };
-const QDir QuizWindow::dictionaryDir{ "dict/", "*.txt" };
 
 QuizWindow::QuizWindow(QWidget* parent) :
 	QMainWindow{ parent },
 	ui{ new Ui::MainWindow },
-	quiz_{}
+	quiz_{},
+	settings_{}
 {
 	ui->setupUi(this);
 	quizModel = new QuizModel{ quiz_, this };
-	optionsDialog = new OptionsDialog{ this };
-	QSettings::setDefaultFormat(QSettings::IniFormat);
+	optionsDialog = new OptionsDialog{ settings_, this };
 
 	ui->answerEdit->setFont(songti);
 	quizModel->setChineseFont(songti);
@@ -56,19 +54,15 @@ void QuizWindow::beginQuiz()
 void QuizWindow::loadDictionaryFiles()
 {
 	quiz_.clear();
-	QSettings settings;
-	settings.beginGroup("dictionaries");
-	QDirIterator it{ dictionaryDir };
-	while (it.hasNext()) {
-		it.next();
-		if (!settings.contains(it.fileName())) {
-			settings.setValue(it.fileName(), true);
-		}
-		if (settings.value(it.fileName(), true).toBool()) {
-			QFile file{ it.filePath() };
+	auto dicts{ settings_.dicts() };
+	for (auto it{ dicts.constBegin() }; it != dicts.constEnd(); ++it) {
+		auto isDictEnabled{ it.value() };
+		if (isDictEnabled) {
+			auto filePath{ QString{ "dict/%1" }.arg(it.key()) };
+			QFile file{ filePath };
 			file.open(QIODevice::ReadOnly | QIODevice::Text);
 			if (!file.isOpen()) {
-				auto error{ tr("Couldn't open %1: %2").arg(it.filePath()).arg(file.errorString()) };
+				auto error{ tr("Couldn't open %1: %2").arg(filePath).arg(file.errorString()) };
 				QMessageBox::critical(this, QString{}, error);
 				std::exit(-1);
 			}

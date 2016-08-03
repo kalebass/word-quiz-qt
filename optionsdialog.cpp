@@ -2,9 +2,10 @@
 #include "ui_optionsdialog.h"
 #include <QSettings>
 
-OptionsDialog::OptionsDialog(QWidget* parent) :
+OptionsDialog::OptionsDialog(SettingsHandler& settings, QWidget* parent) :
 	QDialog{ parent },
-	ui{ new Ui::OptionsDialog }
+	ui{ new Ui::OptionsDialog },
+	settings_{ settings }
 {
 	ui->setupUi(this);
 	connect(this, &QDialog::accepted, this, &OptionsDialog::saveDictionarySettings);
@@ -18,31 +19,26 @@ OptionsDialog::OptionsDialog(QWidget* parent) :
 void OptionsDialog::readDictionaryList()
 {
 	ui->dictionaryList->clear();
-	QSettings settings;
-	settings.beginGroup("dictionaries");
-	auto fileNames{ settings.childKeys() };
-	for (auto& fileName : fileNames) {
-		auto item{ new QListWidgetItem{ fileName, ui->dictionaryList } };
+	auto dicts{ settings_.dicts() };
+	for (auto it{ dicts.constBegin() }; it != dicts.constEnd(); ++it) {
+		auto item{ new QListWidgetItem{ it.key(), ui->dictionaryList } };
 		item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-		auto isChecked{ settings.value(fileName, false).toBool() };
-		item->setCheckState(isChecked ? Qt::Checked : Qt::Unchecked);
+		item->setCheckState(it.value() ? Qt::Checked : Qt::Unchecked);
 		ui->dictionaryList->addItem(item);
 	}
 }
 
 void OptionsDialog::saveDictionarySettings() const
 {
-	QSettings settings;
-	settings.beginGroup("dictionaries");
 	auto changed{ false };
 	auto fileCount{ ui->dictionaryList->count() };
 	for (auto i{ 0 }; i < fileCount; ++i) {
 		auto item{ ui->dictionaryList->item(i) };
 		auto fileName{ item->text() };
 		auto isChecked{ item->checkState() == Qt::Checked };
-		auto wasChecked{ settings.value(fileName).toBool() };
+		auto wasChecked{ settings_.isDictEnabled(fileName) };
 		if (isChecked != wasChecked) {
-			settings.setValue(fileName, isChecked);
+			settings_.setDictEnabled(fileName, isChecked);
 			changed = true;
 		}
 	}
