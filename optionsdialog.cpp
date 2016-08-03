@@ -7,7 +7,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) :
 	ui{ new Ui::OptionsDialog }
 {
 	ui->setupUi(this);
-	connect(this, &QDialog::accepted, this, &OptionsDialog::saveDictionarySettings);
+	connect(this, &QDialog::accepted, this, &OptionsDialog::saveDictSettings);
 	auto flags{ windowFlags() | Qt::CustomizeWindowHint };
 	flags &= ~Qt::WindowContextHelpButtonHint;
 	flags &= ~Qt::WindowSystemMenuHint;
@@ -15,29 +15,29 @@ OptionsDialog::OptionsDialog(QWidget* parent) :
 	setWindowFlags(flags);
 }
 
-void OptionsDialog::readDictionaryList()
+void OptionsDialog::readDictList()
 {
-	ui->dictionaryList->clear();
+	ui->dictList->clear();
 	QSettings settings;
-	settings.beginGroup("dictionaries");
+	settings.beginGroup("dict");
 	auto fileNames{ settings.childKeys() };
 	for (auto& fileName : fileNames) {
-		auto item{ new QListWidgetItem{ fileName, ui->dictionaryList } };
+		auto item{ new QListWidgetItem{ fileName, ui->dictList } };
 		item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
 		auto isChecked{ settings.value(fileName, false).toBool() };
 		item->setCheckState(isChecked ? Qt::Checked : Qt::Unchecked);
-		ui->dictionaryList->addItem(item);
+		ui->dictList->addItem(item);
 	}
 }
 
-void OptionsDialog::saveDictionarySettings() const
+void OptionsDialog::saveDictSettings() const
 {
 	QSettings settings;
-	settings.beginGroup("dictionaries");
+	settings.beginGroup("dict");
 	auto changed{ false };
-	auto fileCount{ ui->dictionaryList->count() };
+	auto fileCount{ ui->dictList->count() };
 	for (auto i{ 0 }; i < fileCount; ++i) {
-		auto item{ ui->dictionaryList->item(i) };
+		auto item{ ui->dictList->item(i) };
 		auto fileName{ item->text() };
 		auto isChecked{ item->checkState() == Qt::Checked };
 		auto wasChecked{ settings.value(fileName).toBool() };
@@ -47,7 +47,7 @@ void OptionsDialog::saveDictionarySettings() const
 		}
 	}
 	if (changed) {
-		emit dictionarySettingChanged();
+		emit dictSettingChanged();
 	}
 }
 

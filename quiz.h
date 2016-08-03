@@ -33,7 +33,7 @@ private:
 	int score_;
 	int numChoices_;
 	Mode mode_;
-	QVector<QStringList> dictionary_;
+	QVector<QStringList> dict_;
 	QVector<int> currentChoiceIndexes_;
 	QVector<int> answerIndexes_;
 };
