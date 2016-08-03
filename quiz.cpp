@@ -20,7 +20,7 @@ Quiz::Quiz() :
 	score_{ 0 },
 	numChoices_{ 7 },
 	mode_{ Mode::MultipleChoice },
-	dictionary_{ },
+	dict_{ },
 	currentChoiceIndexes_{ },
 	answerIndexes_{ }
 {
@@ -32,20 +32,20 @@ void Quiz::addWords(QTextStream& stream)
 	const auto separator{ QChar(QChar::Tabulation) };
 	while (!stream.atEnd()) {
 		auto line{ stream.readLine() };
-		dictionary_.append(line.split(separator));
+		dict_.append(line.split(separator));
 	}
 }
 
 void Quiz::clear()
 {
-	dictionary_.clear();
+	dict_.clear();
 	currentQuestion_ = -1;
 	score_ = 0;
 }
 
 int Quiz::wordCount() const
 {
-	return dictionary_.length();
+	return dict_.length();
 }
 
 int Quiz::currentIndex() const
@@ -65,7 +65,7 @@ int Quiz::numChoices() const
 
 QString Quiz::currentWord(Language language) const
 {
-	auto words{ dictionary_.at(currentCorrectIndex()) };
+	auto words{ dict_.at(currentCorrectIndex()) };
 	auto index{ static_cast<int>(language) };
 	return words.at(index);
 }
@@ -73,7 +73,7 @@ QString Quiz::currentWord(Language language) const
 QString Quiz::alternative(int number, Language language) const
 {
 	auto wordIndex{ currentChoiceIndexes_.at(number) };
-	auto words{ dictionary_.at(wordIndex) };
+	auto words{ dict_.at(wordIndex) };
 	auto index{ static_cast<int>(language) };
 	return words.at(index);
 }

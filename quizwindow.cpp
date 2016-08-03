@@ -30,8 +30,8 @@ QuizWindow::QuizWindow(QWidget* parent) :
 	ui->toolBar->addAction(showOptionsAction);
 	connect(ui->nextButton, &QAbstractButton::clicked, this, &QuizWindow::displayQuestion);
 	connect(showOptionsAction, &QAction::triggered, optionsDialog, &QWidget::show);
-	connect(showOptionsAction, &QAction::triggered, optionsDialog, &OptionsDialog::readDictionaryList);
-	connect(optionsDialog, &OptionsDialog::dictionarySettingChanged, this, &QuizWindow::beginQuiz);
+	connect(showOptionsAction, &QAction::triggered, optionsDialog, &OptionsDialog::readDictList);
+	connect(optionsDialog, &OptionsDialog::dictSettingChanged, this, &QuizWindow::beginQuiz);
 	connect(ui->choiceTable, &QAbstractItemView::clicked, this, &QuizWindow::onChoice);
 	connect(ui->choiceTable, &QAbstractItemView::activated, this, &QuizWindow::onChoice);
 	connect(ui->answerEdit, &QLineEdit::returnPressed, this,&QuizWindow::onAnswerEntered);
@@ -40,7 +40,7 @@ QuizWindow::QuizWindow(QWidget* parent) :
 void QuizWindow::beginQuiz()
 {
 	ui->choiceTable->setModel(nullptr);
-	loadDictionaryFiles();
+	loadDictFiles();
 	if (quiz_.wordCount() != 0) {
 		quiz_.begin();
 		ui->choiceTable->setModel(quizModel);
@@ -51,7 +51,7 @@ void QuizWindow::beginQuiz()
 	}
 }
 
-void QuizWindow::loadDictionaryFiles()
+void QuizWindow::loadDictFiles()
 {
 	quiz_.clear();
 	auto dicts{ settings_.dicts() };

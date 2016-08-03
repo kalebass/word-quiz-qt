@@ -22,13 +22,13 @@ public:
 
 private:
 	Q_OBJECT
-	static const QDir dictionaryDir;
+	static const QDir dictDir;
 	static QFont songti;
 	static QFont heiti;
 	static QFont fangSongti;
 	static QFont kaiti;
 
-	void loadDictionaryFiles();
+	void loadDictFiles();
 	void displayQuestion();
 	void beginQuiz();
 	void onChoice(const QModelIndex&);

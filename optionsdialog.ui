@@ -15,16 +15,16 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_0">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="quizStyleLabel">
        <property name="text">
         <string>Quiz style:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radioButton">
+      <widget class="QRadioButton" name="multipleChoice">
        <property name="text">
         <string>Multiple choice</string>
        </property>
@@ -34,9 +34,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radioButton_2">
+      <widget class="QRadioButton" name="freeform">
        <property name="text">
-        <string>Type answer</string>
+        <string>Freeform</string>
        </property>
        <attribute name="buttonGroup">
         <string notr="true">buttonGroup</string>
@@ -59,16 +59,16 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="verticalLayout_1">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Word lists:</string>
+        <string>Dictionaries:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="dictionaryList">
+      <widget class="QListWidget" name="dictList">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>10</horstretch>
