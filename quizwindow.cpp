@@ -118,6 +118,8 @@ void QuizWindow::displayQuestion()
 	quiz_.nextQuestion();
 	updateUi(true);
 	ui->choiceTable->selectionModel()->clear();
+	ui->answerEdit->setFocus();
+	ui->answerEdit->clear();
 	ui->question->setText(quiz_.currentWord(Quiz::Language::English));
 }
 
