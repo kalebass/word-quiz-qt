@@ -8,7 +8,6 @@ class QTextStream;
 class Quiz
 {
 public:
-	enum class Mode { MultipleChoice, Enter };
 	enum class Language { Hanzi, Pinyin, English };
 
 	Quiz();
@@ -16,6 +15,7 @@ public:
 	int currentIndex() const;
 	int score() const;
 	int numChoices() const;
+	void setNumChoices(int);
 
 	void addWords(QTextStream&);
 	void clear();
@@ -32,7 +32,6 @@ private:
 	int currentQuestion_;
 	int score_;
 	int numChoices_;
-	Mode mode_;
 	QVector<QStringList> dict_;
 	QVector<int> currentChoiceIndexes_;
 	QVector<int> answerIndexes_;

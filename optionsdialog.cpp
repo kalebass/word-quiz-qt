@@ -8,6 +8,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) :
 {
 	ui->setupUi(this);
 	connect(this, &QDialog::accepted, this, &OptionsDialog::saveDictSettings);
+	connect(this, &QDialog::accepted, this, &OptionsDialog::saveModeSettings);
 	auto flags{ windowFlags() | Qt::CustomizeWindowHint };
 	flags &= ~Qt::WindowContextHelpButtonHint;
 	flags &= ~Qt::WindowSystemMenuHint;
@@ -15,10 +16,14 @@ OptionsDialog::OptionsDialog(QWidget* parent) :
 	setWindowFlags(flags);
 }
 
-void OptionsDialog::readDictList()
+void OptionsDialog::readSettings()
 {
-	ui->dictList->clear();
 	QSettings settings;
+	auto multipleChoice{ settings.value("multiple choice mode").toBool() };
+	ui->multipleChoice->setChecked(multipleChoice);
+	ui->freeform->setChecked(!multipleChoice);
+
+	ui->dictList->clear();
 	settings.beginGroup("dict");
 	auto fileNames{ settings.childKeys() };
 	for (auto& fileName : fileNames) {
@@ -27,6 +32,18 @@ void OptionsDialog::readDictList()
 		auto isChecked{ settings.value(fileName, false).toBool() };
 		item->setCheckState(isChecked ? Qt::Checked : Qt::Unchecked);
 		ui->dictList->addItem(item);
+	}
+}
+
+void OptionsDialog::saveModeSettings() const
+{
+	QSettings settings;
+	auto isChecked{ ui->multipleChoice->isChecked() };
+	auto wasChecked{ settings.value("multiple choice mode").toBool() };
+	auto changed{ isChecked != wasChecked };
+	settings.setValue("multiple choice mode", isChecked);
+	if (changed) {
+		emit modeSettingChanged();
 	}
 }
 

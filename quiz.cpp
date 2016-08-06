@@ -4,7 +4,6 @@
 #include <random>
 #include <QTextStream>
 
-
 QVector<int> shuffledRange(int length, int max)
 {
 	QVector<int> numbers(max);
@@ -19,7 +18,6 @@ Quiz::Quiz() :
 	currentQuestion_{ -1 },
 	score_{ 0 },
 	numChoices_{ 7 },
-	mode_{ Mode::MultipleChoice },
 	dict_{ },
 	currentChoiceIndexes_{ },
 	answerIndexes_{ }
@@ -63,6 +61,11 @@ int Quiz::numChoices() const
 	return numChoices_;
 }
 
+void Quiz::setNumChoices(int value)
+{
+	numChoices_ = value;
+}
+
 QString Quiz::currentWord(Language language) const
 {
 	auto words{ dict_.at(currentCorrectIndex()) };
@@ -95,6 +98,9 @@ void Quiz::begin()
 void Quiz::nextQuestion()
 {
 	++currentQuestion_;
+	if (numChoices() == 0) {
+		return;
+	}
 	currentChoiceIndexes_ = shuffledRange(numChoices(), wordCount());
 	if (!currentChoiceIndexes_.contains(currentCorrectIndex())) {
 		auto alternative{ qrand() % numChoices() };

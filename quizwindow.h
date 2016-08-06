@@ -28,10 +28,12 @@ private:
 	static QFont kaiti;
 
 	void loadDictFiles();
+	void addDict(const QString& path);
 	void displayQuestion();
 	void beginQuiz();
 	void onChoice(const QModelIndex&);
 	void onAnswerEntered();
+	void onModeChanged();
 	void next();
 	void updateUi(bool showQuestion);
 

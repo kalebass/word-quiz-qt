@@ -26,14 +26,17 @@ QuizWindow::QuizWindow(QWidget* parent) :
 
 	ui->answerEdit->setFont(songti);
 	quizModel->setChineseFont(songti);
+	loadDictFiles();
+	optionsDialog->readSettings();
 	beginQuiz();
 
 	auto showOptionsAction{ new QAction{ "Options", this } };
 	ui->toolBar->addAction(showOptionsAction);
 	connect(ui->nextButton, &QAbstractButton::clicked, this, &QuizWindow::displayQuestion);
 	connect(showOptionsAction, &QAction::triggered, optionsDialog, &QWidget::show);
-	connect(showOptionsAction, &QAction::triggered, optionsDialog, &OptionsDialog::readDictList);
 	connect(optionsDialog, &OptionsDialog::dictSettingChanged, this, &QuizWindow::beginQuiz);
+	connect(optionsDialog, &OptionsDialog::modeSettingChanged, this, &QuizWindow::onModeChanged);
+	connect(optionsDialog, &OptionsDialog::modeSettingChanged, quizModel, &QuizModel::changeQuizMode);
 	connect(ui->choiceTable, &QAbstractItemView::clicked, this, &QuizWindow::onChoice);
 	connect(ui->choiceTable, &QAbstractItemView::activated, this, &QuizWindow::onChoice);
 	connect(ui->answerEdit, &QLineEdit::returnPressed, this,&QuizWindow::onAnswerEntered);
@@ -42,7 +45,9 @@ QuizWindow::QuizWindow(QWidget* parent) :
 void QuizWindow::beginQuiz()
 {
 	ui->choiceTable->setModel(nullptr);
-	loadDictFiles();
+	QSettings settings;
+	auto multipleChoice{ settings.value("multiple choice mode").toBool() };
+	quiz_.setNumChoices(multipleChoice ? 7 : 0);
 	if (quiz_.wordCount() != 0) {
 		quiz_.begin();
 		ui->choiceTable->setModel(quizModel);
@@ -65,23 +70,30 @@ void QuizWindow::loadDictFiles()
 			settings.setValue(it.fileName(), true);
 		}
 		if (settings.value(it.fileName(), true).toBool()) {
-			QFile file{ it.filePath() };
-			file.open(QIODevice::ReadOnly | QIODevice::Text);
-			if (!file.isOpen()) {
-				auto error{ tr("Couldn't open %1: %2").arg(it.filePath()).arg(file.errorString()) };
-				QMessageBox::critical(this, QString{}, error);
-				std::exit(-1);
-			}
-			QTextStream stream{ &file };
-			quiz_.addWords(stream);
+			addDict(it.filePath());
 		}
 	}
 }
 
+void QuizWindow::addDict(const QString& path)
+{
+	QFile file{ path };
+	file.open(QIODevice::ReadOnly | QIODevice::Text);
+	if (!file.isOpen()) {
+		auto error{ tr("Couldn't open %1: %2").arg(path).arg(file.errorString()) };
+		QMessageBox::critical(this, QString{}, error);
+		std::exit(-1);
+	}
+	QTextStream stream{ &file };
+	quiz_.addWords(stream);
+}
+
 void QuizWindow::updateUi(bool showQuestion)
 {
+	QSettings settings;
 	auto enableNext{ !showQuestion && quiz_.currentIndex() < quiz_.wordCount() - 1 };
 	ui->nextButton->setEnabled(enableNext);
+	quizModel->showAnswer(!showQuestion);
 	ui->answerEdit->setEnabled(showQuestion);
 	ui->choiceTable->setEnabled(showQuestion);
 	ui->choiceTable->setColumnHidden(static_cast<int>(Quiz::Language::Pinyin), showQuestion);
@@ -92,6 +104,13 @@ void QuizWindow::updateUi(bool showQuestion)
 			.arg(quiz_.score()) };
 	ui->statusDisplay->setText(status);
 	ui->choiceTable->resizeColumnsToContents();
+}
+
+void QuizWindow::onModeChanged()
+{
+	QSettings settings;
+	auto multipleChoice{ settings.value("multiple choice mode").toBool() };
+	quiz_.setNumChoices(multipleChoice ? 7 : 0);
 }
 
 void QuizWindow::displayQuestion()

@@ -16,12 +16,15 @@ public:
 	QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
 	Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+	void changeQuizMode();
+	void showAnswer(bool);
 	void setChineseFont(QFont&);
 
 private:
 	Q_OBJECT
 	Quiz& quiz_;
 	QFont* chineseFont;
+	bool showAnswer_;
 };
 
 #endif // QUIZMODEL_H

@@ -13,14 +13,16 @@ class OptionsDialog : public QDialog
 
 public:
 	explicit OptionsDialog(QWidget* parent = nullptr);
-	void readDictList();
+	void readSettings();
 	~OptionsDialog();
 
 signals:
 	void dictSettingChanged() const;
+	void modeSettingChanged() const;
 
 private:
 	void saveDictSettings() const;
+	void saveModeSettings() const;
 	Ui::OptionsDialog* ui;
 };
 

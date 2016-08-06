@@ -17,9 +17,9 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_0">
      <item>
-      <widget class="QLabel" name="quizStyleLabel">
+      <widget class="QLabel" name="quizModeLabel">
        <property name="text">
-        <string>Quiz style:</string>
+        <string>Quiz mode:</string>
        </property>
       </widget>
      </item>

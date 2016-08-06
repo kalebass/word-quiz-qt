@@ -5,11 +5,15 @@
 
 QuizModel::QuizModel(Quiz& quiz, QObject* parent) :
 	QAbstractTableModel{ parent },
-	quiz_{ quiz }
+	quiz_{ quiz },
+	showAnswer_{ false }
 {}
 
 int QuizModel::rowCount(const QModelIndex& parent) const
 {
+	if (quiz_.numChoices() == 0 && showAnswer_) {
+		return 1;
+	}
 	return quiz_.numChoices();
 	parent;
 }
@@ -26,6 +30,9 @@ QVariant QuizModel::data(const QModelIndex& index, int role) const
 	auto choice{ index.row() };
 	auto language{ static_cast<Quiz::Language>(index.column()) };
 	if (role == Qt::DisplayRole) {
+		if (quiz_.numChoices() == 0 && showAnswer_) {
+			return quiz_.currentWord(language);
+		}
 		return { quiz_.alternative(choice, language) };
 	} else if (role == Qt::FontRole && language == Quiz::Language::Hanzi) {
 		return QVariant::fromValue(*chineseFont);
@@ -51,6 +58,19 @@ Qt::ItemFlags QuizModel::flags(const QModelIndex& index) const
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 	}
 	return Qt::ItemIsEnabled;
+}
+
+void QuizModel::showAnswer(bool value)
+{
+	showAnswer_ = value;
+	if (quiz_.numChoices() == 0) {
+		emit layoutChanged();
+	}
+}
+
+void QuizModel::changeQuizMode()
+{
+	emit layoutChanged();
 }
 
 void QuizModel::setChineseFont(QFont& font)
