@@ -26,7 +26,7 @@
      <item>
       <widget class="QRadioButton" name="multipleChoice">
        <property name="text">
-        <string>Multiple choice</string>
+        <string>&amp;Multiple choice</string>
        </property>
        <attribute name="buttonGroup">
         <string notr="true">buttonGroup</string>
@@ -36,7 +36,7 @@
      <item>
       <widget class="QRadioButton" name="freeform">
        <property name="text">
-        <string>Freeform</string>
+        <string>&amp;Freeform</string>
        </property>
        <attribute name="buttonGroup">
         <string notr="true">buttonGroup</string>
