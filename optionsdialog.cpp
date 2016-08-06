@@ -29,6 +29,7 @@ void OptionsDialog::readSettings()
 	for (auto& fileName : fileNames) {
 		auto item{ new QListWidgetItem{ fileName, ui->dictList } };
 		item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+		item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
 		auto isChecked{ settings.value(fileName, false).toBool() };
 		item->setCheckState(isChecked ? Qt::Checked : Qt::Unchecked);
 		ui->dictList->addItem(item);
