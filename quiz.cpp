@@ -64,6 +64,9 @@ int Quiz::numChoices() const
 void Quiz::setNumChoices(int value)
 {
 	numChoices_ = value;
+	if (currentIndex() != -1 && value != 0) {
+		setChoiceIndexes();
+	}
 }
 
 QString Quiz::currentWord(Language language) const
@@ -101,6 +104,11 @@ void Quiz::nextQuestion()
 	if (numChoices() == 0) {
 		return;
 	}
+	setChoiceIndexes();
+}
+
+void Quiz::setChoiceIndexes()
+{
 	currentChoiceIndexes_ = shuffledRange(numChoices(), wordCount());
 	if (!currentChoiceIndexes_.contains(currentCorrectIndex())) {
 		auto alternative{ qrand() % numChoices() };

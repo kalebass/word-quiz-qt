@@ -28,6 +28,7 @@ public:
 
 private:
 	int currentCorrectIndex() const;
+	void setChoiceIndexes();
 
 	int currentQuestion_;
 	int score_;
