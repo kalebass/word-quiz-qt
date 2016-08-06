@@ -26,9 +26,8 @@ QuizWindow::QuizWindow(QWidget* parent) :
 
 	ui->answerEdit->setFont(songti);
 	quizModel->setChineseFont(songti);
-	loadDictFiles();
-	optionsDialog->readSettings();
 	beginQuiz();
+	optionsDialog->readSettings();
 
 	auto showOptionsAction{ new QAction{ "Options", this } };
 	ui->toolBar->addAction(showOptionsAction);
@@ -45,6 +44,7 @@ QuizWindow::QuizWindow(QWidget* parent) :
 void QuizWindow::beginQuiz()
 {
 	ui->choiceTable->setModel(nullptr);
+	loadDictFiles();
 	QSettings settings;
 	auto multipleChoice{ settings.value("multiple choice mode").toBool() };
 	quiz_.setNumChoices(multipleChoice ? 7 : 0);
