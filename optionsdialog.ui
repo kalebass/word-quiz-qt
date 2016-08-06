@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="quizModeLabel">
        <property name="text">
-        <string>Quiz mode:</string>
+        <string>Quiz mode</string>
        </property>
       </widget>
      </item>
@@ -63,7 +63,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Dictionaries:</string>
+        <string>Dictionaries</string>
        </property>
       </widget>
      </item>
