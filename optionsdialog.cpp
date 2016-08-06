@@ -14,6 +14,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) :
 	flags &= ~Qt::WindowSystemMenuHint;
 	flags &= ~Qt::WindowCloseButtonHint;
 	setWindowFlags(flags);
+	addFontItems();
 }
 
 void OptionsDialog::readSettings()
@@ -36,6 +37,11 @@ void OptionsDialog::readSettings()
 	}
 }
 
+QFont OptionsDialog::chineseFont() const
+{
+	return ui->fontList->currentItem()->font();
+}
+
 void OptionsDialog::saveModeSettings() const
 {
 	QSettings settings;
@@ -46,6 +52,25 @@ void OptionsDialog::saveModeSettings() const
 	if (changed) {
 		emit modeSettingChanged();
 	}
+}
+
+void OptionsDialog::addFontItems()
+{
+	QString sampleChars{ "中文" };
+	QFont songti{ "SimSun", 18 };
+	QFont heiti{ "Microsoft YaHei", 16 };
+	QFont fangSongti{ "FangSong", 20 };
+	QFont kaiti{ "KaiTi", 22 };
+	auto item0{ new QListWidgetItem{ sampleChars, ui->fontList } };
+	auto item1{ new QListWidgetItem{ sampleChars, ui->fontList } };
+	auto item2{ new QListWidgetItem{ sampleChars, ui->fontList } };
+	auto item3{ new QListWidgetItem{ sampleChars, ui->fontList } };
+	item0->setFont(songti);
+	item1->setFont(heiti);
+	item2->setFont(fangSongti);
+	item3->setFont(kaiti);
+	item0->setSelected(true);
+	ui->fontList->setCurrentItem(item0);
 }
 
 void OptionsDialog::saveDictSettings() const

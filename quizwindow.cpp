@@ -8,10 +8,6 @@
 #include "quizmodel.h"
 #include "optionsdialog.h"
 
-QFont QuizWindow::songti{ QString{ "SimSun" }, 18 };
-QFont QuizWindow::heiti{ QString{ "Microsoft YaHei" }, 16 };
-QFont QuizWindow::fangSongti{ QString{ "FangSong" }, 20 };
-QFont QuizWindow::kaiti{ QString{ "KaiTi" }, 22 };
 const QDir QuizWindow::dictDir{ "dict/", "*.txt" };
 
 QuizWindow::QuizWindow(QWidget* parent) :
@@ -24,15 +20,16 @@ QuizWindow::QuizWindow(QWidget* parent) :
 	optionsDialog = new OptionsDialog{ this };
 	QSettings::setDefaultFormat(QSettings::IniFormat);
 
-	ui->answerEdit->setFont(songti);
-	quizModel->setChineseFont(songti);
 	beginQuiz();
 	optionsDialog->readSettings();
+	ui->answerEdit->setFont(optionsDialog->chineseFont());
+	quizModel->setChineseFont(optionsDialog->chineseFont());
 
 	auto showOptionsAction{ new QAction{ "Options", this } };
 	ui->toolBar->addAction(showOptionsAction);
 	connect(ui->nextButton, &QAbstractButton::clicked, this, &QuizWindow::displayQuestion);
 	connect(showOptionsAction, &QAction::triggered, optionsDialog, &QWidget::show);
+	connect(optionsDialog, &OptionsDialog::accepted, this, &QuizWindow::onOptionsAccepted);
 	connect(optionsDialog, &OptionsDialog::dictSettingChanged, this, &QuizWindow::beginQuiz);
 	connect(optionsDialog, &OptionsDialog::modeSettingChanged, this, &QuizWindow::onModeChanged);
 	connect(optionsDialog, &OptionsDialog::modeSettingChanged, quizModel, &QuizModel::changeQuizMode);
@@ -111,6 +108,14 @@ void QuizWindow::onModeChanged()
 	QSettings settings;
 	auto multipleChoice{ settings.value("multiple choice mode").toBool() };
 	quiz_.setNumChoices(multipleChoice ? 7 : 0);
+}
+
+void QuizWindow::onOptionsAccepted()
+{
+	auto font{ optionsDialog->chineseFont() };
+	quizModel->setChineseFont(font);
+	ui->answerEdit->setFont(font);
+	ui->choiceTable->resizeColumnsToContents();
 }
 
 void QuizWindow::displayQuestion()

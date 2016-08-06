@@ -14,6 +14,7 @@ class OptionsDialog : public QDialog
 public:
 	explicit OptionsDialog(QWidget* parent = nullptr);
 	void readSettings();
+	QFont chineseFont() const;
 	~OptionsDialog();
 
 signals:
@@ -23,6 +24,7 @@ signals:
 private:
 	void saveDictSettings() const;
 	void saveModeSettings() const;
+	void addFontItems();
 	Ui::OptionsDialog* ui;
 };
 

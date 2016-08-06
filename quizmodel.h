@@ -2,8 +2,8 @@
 #define QUIZMODEL_H
 
 #include <QAbstractTableModel>
+#include <QFont>
 
-class QFont;
 class Quiz;
 
 class QuizModel : public QAbstractTableModel
@@ -18,12 +18,12 @@ public:
 
 	void changeQuizMode();
 	void showAnswer(bool);
-	void setChineseFont(QFont&);
+	void setChineseFont(QFont);
 
 private:
 	Q_OBJECT
 	Quiz& quiz_;
-	QFont* chineseFont;
+	QFont chineseFont;
 	bool showAnswer_;
 };
 
