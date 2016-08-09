@@ -22,14 +22,13 @@ QuizWindow::QuizWindow(QWidget* parent) :
 
 	beginQuiz();
 	optionsDialog->readSettings();
-	ui->answerEdit->setFont(optionsDialog->chineseFont());
-	quizModel->setChineseFont(optionsDialog->chineseFont());
+	applyFont();
 
 	auto showOptionsAction{ new QAction{ "Options", this } };
 	ui->toolBar->addAction(showOptionsAction);
 	connect(ui->nextButton, &QAbstractButton::clicked, this, &QuizWindow::displayQuestion);
 	connect(showOptionsAction, &QAction::triggered, optionsDialog, &QWidget::show);
-	connect(optionsDialog, &OptionsDialog::accepted, this, &QuizWindow::onOptionsAccepted);
+	connect(optionsDialog, &OptionsDialog::accepted, this, &QuizWindow::applyFont);
 	connect(optionsDialog, &OptionsDialog::dictSettingChanged, this, &QuizWindow::beginQuiz);
 	connect(optionsDialog, &OptionsDialog::modeSettingChanged, this, &QuizWindow::onModeChanged);
 	connect(optionsDialog, &OptionsDialog::modeSettingChanged, quizModel, &QuizModel::changeQuizMode);
@@ -110,7 +109,7 @@ void QuizWindow::onModeChanged()
 	quiz_.setNumChoices(multipleChoice ? 7 : 0);
 }
 
-void QuizWindow::onOptionsAccepted()
+void QuizWindow::applyFont()
 {
 	auto font{ optionsDialog->chineseFont() };
 	quizModel->setChineseFont(font);

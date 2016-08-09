@@ -34,7 +34,7 @@ private:
 	void onChoice(const QModelIndex&);
 	void onAnswerEntered();
 	void onModeChanged();
-	void onOptionsAccepted();
+	void applyFont();
 	void next();
 	void updateUi(bool showQuestion);
 
