@@ -35,7 +35,7 @@ QVariant QuizModel::data(const QModelIndex& index, int role) const
 		}
 		return { quiz_.alternative(choice, language) };
 	} else if (role == Qt::FontRole && language == Quiz::Language::Hanzi) {
-		return QVariant::fromValue(*chineseFont);
+		return QVariant::fromValue(chineseFont);
 	} else if (role == Qt::BackgroundRole) {
 		return { QBrush{ QColor::fromHsl(0, 255, 128) } };
 	} else {
@@ -73,7 +73,7 @@ void QuizModel::changeQuizMode()
 	emit layoutChanged();
 }
 
-void QuizModel::setChineseFont(QFont& font)
+void QuizModel::setChineseFont(QFont font)
 {
-	chineseFont = &font;
+	chineseFont = font;
 }
