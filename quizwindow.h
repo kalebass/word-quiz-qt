@@ -22,10 +22,6 @@ public:
 private:
 	Q_OBJECT
 	static const QDir dictDir;
-	static QFont songti;
-	static QFont heiti;
-	static QFont fangSongti;
-	static QFont kaiti;
 
 	void loadDictFiles();
 	void addDict(const QString& path);
