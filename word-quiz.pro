@@ -27,3 +27,6 @@ HEADERS  += \
 FORMS    += \
     quizwindow.ui \
     optionsdialog.ui
+
+RESOURCES += \
+    res.qrc
