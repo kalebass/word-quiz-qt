@@ -24,17 +24,21 @@ QuizWindow::QuizWindow(QWidget* parent) :
 	optionsDialog->readSettings();
 	applyFont();
 
+	auto restartAction{ new QAction{ "Restart", this } };
 	auto showOptionsAction{ new QAction{ "Options", this } };
+	ui->toolBar->addAction(restartAction);
 	ui->toolBar->addAction(showOptionsAction);
-	connect(ui->nextButton, &QAbstractButton::clicked, this, &QuizWindow::displayQuestion);
+
+	connect(restartAction, &QAction::triggered, this, &QuizWindow::beginQuiz);
 	connect(showOptionsAction, &QAction::triggered, optionsDialog, &QWidget::show);
+	connect(ui->nextButton, &QAbstractButton::clicked, this, &QuizWindow::displayQuestion);
+	connect(ui->choiceTable, &QAbstractItemView::clicked, this, &QuizWindow::onChoice);
+	connect(ui->choiceTable, &QAbstractItemView::activated, this, &QuizWindow::onChoice);
+	connect(ui->answerEdit, &QLineEdit::returnPressed, this, &QuizWindow::onAnswerEntered);
 	connect(optionsDialog, &OptionsDialog::accepted, this, &QuizWindow::applyFont);
 	connect(optionsDialog, &OptionsDialog::dictSettingChanged, this, &QuizWindow::beginQuiz);
 	connect(optionsDialog, &OptionsDialog::modeSettingChanged, this, &QuizWindow::onModeChanged);
 	connect(optionsDialog, &OptionsDialog::modeSettingChanged, quizModel, &QuizModel::changeQuizMode);
-	connect(ui->choiceTable, &QAbstractItemView::clicked, this, &QuizWindow::onChoice);
-	connect(ui->choiceTable, &QAbstractItemView::activated, this, &QuizWindow::onChoice);
-	connect(ui->answerEdit, &QLineEdit::returnPressed, this,&QuizWindow::onAnswerEntered);
 }
 
 void QuizWindow::beginQuiz()
