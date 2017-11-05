@@ -16,28 +16,28 @@ class MainWindow;
 class QuizWindow : public QMainWindow
 {
 public:
-	explicit QuizWindow(QWidget* parent = nullptr);
-	~QuizWindow();
+    explicit QuizWindow(QWidget* parent = nullptr);
+    ~QuizWindow();
 
 private:
-	Q_OBJECT
-	static const QDir dictDir;
+    Q_OBJECT
+    static const QDir dictDir;
 
-	void loadDictFiles();
-	void addDict(const QString& path);
-	void displayQuestion();
-	void beginQuiz();
-	void onChoice(const QModelIndex&);
-	void onAnswerEntered();
-	void onModeChanged();
-	void applyFont();
-	void next();
-	void updateUi(bool showQuestion);
+    void loadDictFiles();
+    void addDict(const QString& path);
+    void displayQuestion();
+    void beginQuiz();
+    void onChoice(const QModelIndex&);
+    void onAnswerEntered();
+    void onModeChanged();
+    void applyFont();
+    void next();
+    void updateUi(bool showQuestion);
 
-	Ui::MainWindow* ui;
-	OptionsDialog* optionsDialog;
-	Quiz quiz_;
-	QuizModel* quizModel;
+    Ui::MainWindow* ui;
+    OptionsDialog* optionsDialog;
+    Quiz quiz_;
+    QuizModel* quizModel;
 };
 
 #endif // MAINWINDOW_H
